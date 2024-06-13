@@ -207,11 +207,11 @@ func release(source string, destination string, output string, ruleSetOutput str
 		return err
 	}
 
-	writer, err = newWriter(metadata, []string{"cn", "private"})
+	writer, err = newWriter(metadata, []string{"cn", "akamai", "bilibili", "cloudflare", "cloudfront", "facebook", "fastly", "google", "netflix", "telegram", "twitter"})
 	if err != nil {
 		return err
 	}
-	err = write(writer, countryMap, "geoip-cn.db", []string{"cn", "private"})
+	err = write(writer, countryMap, "geoip-mod.db", []string{"cn", "akamai", "bilibili", "cloudflare", "cloudfront", "facebook", "fastly", "google", "netflix", "telegram", "twitter"})
 	if err != nil {
 		return err
 	}
@@ -270,7 +270,7 @@ func setActionOutput(name string, content string) error {
 }
 
 func main() {
-	err := release("Loyalsoldier/geoip", "1715173329/sing-geoip", "geoip.db", "rule-set")
+	err := release("shNzshNz/geoipdata", "shNzshNz/geoipdb", "geoip.db", "rule-set")
 	if err != nil {
 		log.Fatal(err)
 	}

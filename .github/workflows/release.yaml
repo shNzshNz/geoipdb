@@ -31,7 +31,7 @@ jobs:
         if: steps.build.outputs.skip != 'true'
         run: |
           sha256sum geoip.db > geoip.db.sha256sum
-          sha256sum geoip-cn.db > geoip-cn.db.sha256sum
+          sha256sum geoip-mod.db > geoip-mod.db.sha256sum
       - name: Release release branch
         if: steps.build.outputs.skip != 'true'
         run: .github/release-branch.sh
@@ -48,8 +48,8 @@ jobs:
           files: |
             geoip.db
             geoip.db.sha256sum
-            geoip-cn.db
-            geoip-cn.db.sha256sum
+            geoip-mod.db
+            geoip-mod.db.sha256sum
       - name: Delete releases and workflows runs
         uses: ophub/delete-releases-workflows@main
         with:
