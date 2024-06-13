@@ -6,7 +6,7 @@ on:
     - cron: "30 9 * * *"
 jobs:
   build:
-    name: Release db
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,6 +17,11 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 'stable'
+      - name: Set variables
+        run: |
+          echo "TAG_NAME=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+        shell: bash
       - name: Build geoip
         id: build
         env:
@@ -41,8 +46,8 @@ jobs:
         if: steps.build.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: $(date +%Y%m%d%H%M%S)
-          name: $(date +%Y%m%d%H%M%S)
+          tag_name: ${{ env.TAG_NAME }}
+          name: ${{ env.RELEASE_NAME }}
           draft: false
           prerelease: false
           files: |
