@@ -1,11 +1,12 @@
 name: Build
+
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
-    name: Build
+    name: Build db
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

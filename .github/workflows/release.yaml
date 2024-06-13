@@ -1,11 +1,12 @@
 name: Release
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * 3"
+    - cron: "30 9 * * *"
 jobs:
   build:
-    name: Build
+    name: Release db
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,17 +37,12 @@ jobs:
         run: .github/release-branch.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: dev-drprasad/delete-older-releases@v0.3.3
-        with:
-          keep_latest: 10
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Release geoip
         if: steps.build.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.build.outputs.tag }}
-          name: ${{ steps.build.outputs.tag }}
+          tag_name: $(date +%Y%m%d%H%M%S)
+          name: $(date +%Y%m%d%H%M%S)
           draft: false
           prerelease: false
           files: |
@@ -54,3 +50,17 @@ jobs:
             geoip.db.sha256sum
             geoip-cn.db
             geoip-cn.db.sha256sum
+      - name: Delete releases and workflows runs
+        uses: ophub/delete-releases-workflows@main
+        with:
+          delete_releases: true
+          prerelease_option: "all"
+          releases_keep_latest: 7
+          # releases_keep_keyword: ""
+          delete_tags: true
+          delete_workflows: true
+          workflows_keep_day: 7
+          # workflows_keep_keyword: ""
+          out_log: false
+          # repo: "shNzshNz/geoipdb"
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
